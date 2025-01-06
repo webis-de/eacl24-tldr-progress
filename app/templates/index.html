@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <div class="columns">
+        <!-- Sidebar with filters -->
+        <div class="column is-one-quarter">
+            {% include "sidebar.html" %}
+        </div>
+
+        <!-- Main content -->
+        <div class="column">
+            <div id="papers-container" class="content" hx-get="/api/papers" hx-trigger="load" hx-swap="innerHTML">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

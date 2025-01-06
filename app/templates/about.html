@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div>
+        <div class="columns is-multiline">
+            <!-- Database Stats -->
+            <div class="column is-12">
+                <div class="box">
+                    <h2 class="title is-4"><span class="stats-title"></span>Current Database Statistics</h2>
+                    <div class="columns is-multiline">
+                        <div class="column is-3">
+                            <div class="has-text-centered">
+                                <p class="heading">Total Papers</p>
+                                <p class="title">{{ total_papers }}</p>
+                            </div>
+                        </div>
+                        <div class="column is-3">
+                            <div class="has-text-centered">
+                                <p class="heading">Unique Datasets</p>
+                                <p class="title">{{ unique_datasets }}</p>
+                            </div>
+                        </div>
+                        <div class="column is-3">
+                            <div class="has-text-centered">
+                                <p class="heading">Research Challenges</p>
+                                <p class="title">{{ total_challenges }}</p>
+                            </div>
+                        </div>
+                        <div class="column is-3">
+                            <div class="has-text-centered">
+                                <p class="heading">Pipeline Components</p>
+                                <p class="title">{{ total_components }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Top 10 Datasets -->
+            <div class="column is-12">
+                <div class="box">
+                    <h2 class="title is-4"><span class="stats-title"></span>Most Popular Datasets</h2>
+                    <div id="datasets-plot">{{ datasets_plot | safe }}</div>
+                </div>
+            </div>
+
+            <!-- Distribution of Challenges -->
+            <div class="column is-12">
+                <div class="box">
+                    <h2 class="title is-4"><span class="stats-title"></span>Research Challenges Tackled Across Papers
+                    </h2>
+                    <div id="challenges-plot">{{ challenges_plot | safe }}</div>
+                </div>
+            </div>
+
+            <!-- Distribution of Components -->
+            <div class="column is-12">
+                <div class="box">
+                    <h2 class="title is-4"><span class="stats-title"></span>Components of the Pipeline Investigated</h2>
+                    <div id="components-plot">{{ components_plot | safe }}</div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Include Plotly -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}

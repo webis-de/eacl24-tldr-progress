@@ -1,0 +1,94 @@
+<div class="box">
+    <h3 class="title is-5">Filter Papers By:</h3>
+
+    <!-- Venue Filter -->
+    <div class="field">
+        <label class="label">Venue</label>
+        <div class="control">
+            <select id="venue-select" multiple placeholder="Select venues...">
+                {% for venue in venues %}
+                <option value="{{ venue }}">{{ venue }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Year Filter -->
+    <div class="field">
+        <label class="label">Year</label>
+        <div class="control">
+            <select id="year-select" multiple placeholder="Select years...">
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Metrics Filter -->
+    <div class="field">
+        <label class="label">Metrics</label>
+        <div class="control">
+            <select id="metrics-select" multiple placeholder="Select metrics...">
+                {% for metric in metrics %}
+                <option value="{{ metric }}">{{ metric }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Datasets Filter -->
+    <div class="field">
+        <label class="label">Datasets</label>
+        <div class="control">
+            <select id="datasets-select" multiple placeholder="Select datasets...">
+                {% for dataset in datasets %}
+                <option value="{{ dataset }}">{{ dataset }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Challenges Filter -->
+    <div class="field">
+        <label class="label">Challenges</label>
+        <div class="control">
+            <select id="challenges-select" multiple placeholder="Select challenges...">
+                {% for challenge in challenges %}
+                <option value="{{ challenge }}">{{ challenge.replace('-', ' ').title() }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="field">
+        <label class="label">Search</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" id="search-input" placeholder="Search papers...">
+            <span class="icon is-small is-left">
+                <i class="fas fa-search"></i>
+            </span>
+        </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="field is-grouped mt-5">
+        <div class="control">
+            <button id="apply-filters" class="button is-primary">
+                <span class="icon">
+                    <i class="fas fa-filter"></i>
+                </span>
+                <span>Apply Filters</span>
+            </button>
+        </div>
+        <div class="control">
+            <button id="reset-filters" class="button is-light">
+                <span class="icon">
+                    <i class="fas fa-undo"></i>
+                </span>
+                <span>Reset</span>
+            </button>
+        </div>
+    </div>
+</div>

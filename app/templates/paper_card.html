@@ -1,0 +1,162 @@
+{% if papers %}
+<div class="paper-count mb-4">
+    Showing {{ papers|length }} papers {% if total_filtered %}out of {{ total_filtered }} {% endif %}
+</div>
+
+{% for paper in papers %}
+<div class="box paper-card">
+    <article class="media">
+        <div class="media-content">
+            <!-- Basic Information -->
+            <div class="content">
+                <div class="paper-header">
+                    <h4 class="title is-4 mb-2">{{ paper.title }}</h4>
+                    <div class="paper-meta mb-2">
+                        <div class="authors">
+                            <span class="icon"><i class="fas fa-user"></i></span>{{ paper.authors|join(', ') }}
+                        </div>
+
+                        <div>
+                            <span class="tag is-light">{{ paper.venue }}</span>
+                            <span class="tag is-light">{{ paper.year }}</span>
+                            {% if paper.code_url %}
+                            <a href="{{ paper.code_url }}" target="_blank" class="tag is-info is-light">
+                                <span class="icon"><i class="fab fa-github"></i></span>
+                                <span>Code</span>
+                            </a>
+                            {% endif %}
+                            {% if paper.paper_url %}
+                            <a href="{{ paper.paper_url }}" target="_blank" class="tag is-primary is-light">
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span>Paper</span>
+                            </a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                {% if paper.tldr %}
+                <div class="tldr mb-2">
+                    <strong>TL;DR:</strong> {{ paper.tldr }}
+                </div>
+                {% endif %}
+
+                <button class="button is-small is-light toggle-details" onclick="toggleDetails(this)"
+                    data-target="details-{{ loop.index }}">
+                    <span class="icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    <span>Show Details</span>
+                </button>
+
+                <!-- Additional Information (Hidden by Default) -->
+                <div id="details-{{ loop.index }}" class="paper-details is-hidden mt-4">
+                    <div class="columns">
+                        <!-- Problems & Solutions (Left Column) -->
+                        <div class="column is-7">
+                            {% if paper.problems_with_solutions %}
+                            <div class="problems-solutions">
+                                <h4 class="title is-6 mb-3">Problems & Solutions</h4>
+                                {% for problem, solution in paper.problems_with_solutions.items() %}
+                                <div class="problem-solution-item mb-3">
+                                    <div class="problem">
+                                        <span class="icon has-text-danger">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </span>
+                                        {{ problem }}
+                                    </div>
+                                    <div class="solution">
+                                        <span class="icon has-text-success">
+                                            <i class="fas fa-lightbulb"></i>
+                                        </span>
+                                        {{ solution }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Metadata (Right Column) -->
+                        <div class="column is-5">
+                            <h4 class="title is-6 mb-3">Details</h4>
+                            {% if paper.metrics %}
+                            <div class="metadata-section mb-3">
+                                <h6 class="title is-6 mb-2">Metrics</h6>
+                                <div class="tags">
+                                    {% for metric in paper.metrics %}
+                                    <span class="tag is-info is-light">{{ metric }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if paper.datasets %}
+                            <div class="metadata-section mb-3">
+                                <h6 class="title is-6 mb-2">Datasets</h6>
+                                <div class="tags">
+                                    {% for dataset in paper.datasets %}
+                                    <span class="tag is-success is-light">{{ dataset }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if paper.pipeline_components %}
+                            <div class="metadata-section mb-3">
+                                <h6 class="title is-6 mb-2">Pipeline Components</h6>
+                                <div class="tags">
+                                    {% for component in paper.pipeline_components %}
+                                    <span class="tag is-warning is-light">{{ component.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if paper.challenges %}
+                            <div class="metadata-section">
+                                <h6 class="title is-6 mb-2">Challenges</h6>
+                                <div class="tags">
+                                    {% for challenge in paper.challenges %}
+                                    <span class="tag is-danger is-light">{{ challenge.name.replace('-', ' ').title()
+                                        }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+{% endfor %}
+
+<!-- Pagination -->
+<nav class="pagination-container">
+    <div class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous" {% if page> 1 %}
+            hx-get="/api/papers?page={{ page - 1 }}{% if filter_query %}&{{ filter_query }}{% endif %}"
+            hx-target="#papers-container"
+            {% else %}
+            disabled
+            {% endif %}>
+            Previous
+        </a>
+        <span class="pagination-current">Page {{ page }} of {{ total_pages }}</span>
+        <a class="pagination-next" {% if has_next %}
+            hx-get="/api/papers?page={{ page + 1 }}{% if filter_query %}&{{ filter_query }}{% endif %}"
+            hx-target="#papers-container" {% else %} disabled {% endif %}>
+            Next
+        </a>
+    </div>
+</nav>
+{% else %}
+<div class="notification is-warning">
+    No papers found matching the selected criteria.
+</div>
+{% endif %}

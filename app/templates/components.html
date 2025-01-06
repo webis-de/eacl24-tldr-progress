@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="columns">
+        <!-- Main content -->
+        <div class="column" x-data="{ 
+        resetComponents() {
+            document.querySelectorAll('.component-list input[type=checkbox]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.querySelectorAll('.component-list[x-data]').forEach(el => {
+                if (el.__x) {
+                    el.__x.$data.selected = [];
+                }
+            });
+            // Trigger HTMX request to reset papers
+            htmx.ajax('GET', '/api/papers', '#papers-container');
+        }
+    }">
+            <div class="mb-5">
+                <h1 class="title">Filter by Components of the Summarization Pipeline</h1>
+                <p class="subtitle is-6">Multiple selections perform an OR search.
+                </p>
+            </div>
+
+            <!-- Reset button -->
+            <div class="has-text-right mb-4">
+                <button class="button is-light" @click="resetComponents()">
+                    <span class="icon">
+                        <i class="fas fa-undo"></i>
+                    </span>
+                    <span>Reset</span>
+                </button>
+            </div>
+
+            <!-- Component filters -->
+            <div class="pipeline-container">
+                <!-- Document Representation -->
+                <div class="pipeline-stage">
+                    <div class="box pipeline-box doc-rep">
+                        <h2 class="title is-5 mb-4 pipeline-header">
+                            <span class="pipeline-number">1</span>
+                            Document Representation
+                        </h2>
+                        <div class="component-list" x-data="{ selected: [] }">
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Input Encoding" x-model="selected" hx-get="/api/papers"
+                                    hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Input Encoding
+                                <span class="tag is-light">{{ component_counts.get('Input Encoding', 0) }}</span>
+                            </label>
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Unit Relationship" x-model="selected" hx-get="/api/papers"
+                                    hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Unit Relationship
+                                <span class="tag is-light">{{ component_counts.get('Unit Relationship', 0) }}</span>
+                            </label>
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Data Augmentation" x-model="selected" hx-get="/api/papers"
+                                    hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Data Augmentation
+                                <span class="tag is-light">{{ component_counts.get('Data Augmentation', 0) }}</span>
+                            </label>
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="External Knowledge" x-model="selected"
+                                    hx-get="/api/papers" hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                External Knowledge
+                                <span class="tag is-light">{{ component_counts.get('External Knowledge', 0) }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Training -->
+                <div class="pipeline-stage">
+                    <div class="box pipeline-box model-train">
+                        <h2 class="title is-5 mb-4 pipeline-header">
+                            <span class="pipeline-number">2</span>
+                            Model Training
+                        </h2>
+                        <div class="component-list" x-data="{ selected: [] }">
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Objective Function" x-model="selected"
+                                    hx-get="/api/papers" hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Objective Function
+                                <span class="tag is-light">{{ component_counts.get('Objective Function', 0) }}</span>
+                            </label>
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Auxiliary Tasks" x-model="selected" hx-get="/api/papers"
+                                    hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Auxiliary Tasks
+                                <span class="tag is-light">{{ component_counts.get('Auxiliary Tasks', 0) }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Generation -->
+                <div class="pipeline-stage">
+                    <div class="box pipeline-box sum-gen">
+                        <h2 class="title is-5 mb-4 pipeline-header">
+                            <span class="pipeline-number">3</span>
+                            Summary Generation
+                        </h2>
+                        <div class="component-list" x-data="{ selected: [] }">
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Unit Selection" x-model="selected" hx-get="/api/papers"
+                                    hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Unit Selection
+                                <span class="tag is-light">{{ component_counts.get('Unit Selection', 0) }}</span>
+                            </label>
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Controlled Generation" x-model="selected"
+                                    hx-get="/api/papers" hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Controlled Generation
+                                <span class="tag is-light">{{ component_counts.get('Controlled Generation', 0) }}</span>
+                            </label>
+                            <label class="checkbox mb-2 d-block">
+                                <input type="checkbox" value="Post Processing" x-model="selected" hx-get="/api/papers"
+                                    hx-trigger="change" hx-target="#papers-container"
+                                    hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
+                                Post Processing
+                                <span class="tag is-light">{{ component_counts.get('Post Processing', 0) }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div id="papers-container" class="mt-5">
+                {% include "paper_card.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
