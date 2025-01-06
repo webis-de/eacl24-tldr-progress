@@ -10,9 +10,46 @@
 
         <!-- Main content -->
         <div class="column">
-            <div id="papers-container" class="content" hx-get="/api/papers" hx-trigger="load" hx-swap="innerHTML">
+            <!-- Search Bar -->
+            <div class="box mb-4">
+                <form id="search-form" class="field" onsubmit="handleSearch(event)">
+                    <div class="control has-icons-left">
+                        <input class="input" type="text" id="search-input" placeholder="Search papers..."
+                            autocomplete="off">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <div id="papers-container" class="content">
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Load initial papers
+    window.addEventListener('load', () => {
+        fetchPapers();
+    });
+
+    async function fetchPapers(searchTerm = '') {
+        try {
+            const url = searchTerm ? `/api/papers?search=${encodeURIComponent(searchTerm)}` : '/api/papers';
+            const response = await fetch(url);
+            const html = await response.text();
+            document.getElementById('papers-container').innerHTML = html;
+        } catch (error) {
+            console.error('Error fetching papers:', error);
+        }
+    }
+
+    function handleSearch(event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById('search-input').value;
+        fetchPapers(searchTerm);
+    }
+</script>
 {% endblock %}

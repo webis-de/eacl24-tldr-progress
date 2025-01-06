@@ -48,28 +48,28 @@
                                 <input type="checkbox" value="Input Encoding" x-model="selected" hx-get="/api/papers"
                                     hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Input Encoding
+                                <code>Input Encoding</code>
                                 <span class="tag is-light">{{ component_counts.get('Input Encoding', 0) }}</span>
                             </label>
                             <label class="checkbox mb-2 d-block">
                                 <input type="checkbox" value="Unit Relationship" x-model="selected" hx-get="/api/papers"
                                     hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Unit Relationship
+                                <code>Unit Relationship</code>
                                 <span class="tag is-light">{{ component_counts.get('Unit Relationship', 0) }}</span>
                             </label>
                             <label class="checkbox mb-2 d-block">
                                 <input type="checkbox" value="Data Augmentation" x-model="selected" hx-get="/api/papers"
                                     hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Data Augmentation
+                                <code>Data Augmentation</code>
                                 <span class="tag is-light">{{ component_counts.get('Data Augmentation', 0) }}</span>
                             </label>
                             <label class="checkbox mb-2 d-block">
                                 <input type="checkbox" value="External Knowledge" x-model="selected"
                                     hx-get="/api/papers" hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                External Knowledge
+                                <code>External Knowledge</code>
                                 <span class="tag is-light">{{ component_counts.get('External Knowledge', 0) }}</span>
                             </label>
                         </div>
@@ -88,14 +88,14 @@
                                 <input type="checkbox" value="Objective Function" x-model="selected"
                                     hx-get="/api/papers" hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Objective Function
+                                <code>Objective Function</code>
                                 <span class="tag is-light">{{ component_counts.get('Objective Function', 0) }}</span>
                             </label>
                             <label class="checkbox mb-2 d-block">
                                 <input type="checkbox" value="Auxiliary Tasks" x-model="selected" hx-get="/api/papers"
                                     hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Auxiliary Tasks
+                                <code>Auxiliary Tasks</code>
                                 <span class="tag is-light">{{ component_counts.get('Auxiliary Tasks', 0) }}</span>
                             </label>
                         </div>
@@ -114,21 +114,21 @@
                                 <input type="checkbox" value="Unit Selection" x-model="selected" hx-get="/api/papers"
                                     hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Unit Selection
+                                <code>Unit Selection</code>
                                 <span class="tag is-light">{{ component_counts.get('Unit Selection', 0) }}</span>
                             </label>
                             <label class="checkbox mb-2 d-block">
                                 <input type="checkbox" value="Controlled Generation" x-model="selected"
                                     hx-get="/api/papers" hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Controlled Generation
+                                <code>Controlled Generation</code>
                                 <span class="tag is-light">{{ component_counts.get('Controlled Generation', 0) }}</span>
                             </label>
                             <label class="checkbox mb-2 d-block">
                                 <input type="checkbox" value="Post Processing" x-model="selected" hx-get="/api/papers"
                                     hx-trigger="change" hx-target="#papers-container"
                                     hx-vals='js:{components: Array.from(document.querySelectorAll(".component-list input:checked")).map(cb => cb.value)}'>
-                                Post Processing
+                                <code>Post Processing</code>
                                 <span class="tag is-light">{{ component_counts.get('Post Processing', 0) }}</span>
                             </label>
                         </div>
