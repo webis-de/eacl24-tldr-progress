@@ -10,6 +10,15 @@ TL;DR Progress is an interactive web application for exploring the landscape of 
 - 📊 Interactive visualizations of research trends
 - 📑 TL;DR summaries for quick paper understanding
 
+
+## Screenshots
+
+![filters](home.png)
+
+![pipeline search](pipeline-search.png)
+
+![summary](summary.png)
+
 ## Installation
 
 1. Clone the repository:
@@ -43,6 +52,7 @@ TL;DR Progress is an interactive web application for exploring the landscape of 
 
 The application will load with the full database of papers and all filtering capabilities enabled.
 
+
 ## Development
 
 - The application is built with FastAPI for the backend and uses SQLite for the database
@@ -50,3 +60,4 @@ The application will load with the full database of papers and all filtering cap
 - All templates are in the `app/templates` directory
 - Static files (CSS, JS) are in the `app/static` directory
 - Database and models are in the `app/database` directory
+
