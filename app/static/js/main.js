@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         year: initSelect('year-select'),
         metrics: initSelect('metrics-select'),
         datasets: initSelect('datasets-select'),
+        domains: initSelect('domains-select'),
         challenges: initSelect('challenges-select')
     };
     
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             populateSelect(selects.year, data.years);
             populateSelect(selects.metrics, data.metrics);
             populateSelect(selects.datasets, data.datasets);
+            populateSelect(selects.domains, data.domains);
             populateSelect(selects.challenges, data.challenges);
         });
 
@@ -75,11 +77,12 @@ function applyFilters() {
     const years = getSelectValues('year-select');
     const metrics = getSelectValues('metrics-select');
     const datasets = getSelectValues('datasets-select');
+    const domains = getSelectValues('domains-select');
     const challenges = getSelectValues('challenges-select');
-    const searchQuery = document.getElementById('search-input').value;
+    const searchTerm = document.getElementById('search-input')?.value || '';
 
     console.log('Current filter values:', {
-        venues, years, metrics, datasets, challenges, searchQuery
+        venues, years, metrics, datasets, domains, challenges, searchTerm
     });
 
     const params = new URLSearchParams();
@@ -87,8 +90,9 @@ function applyFilters() {
     if (years.length) params.append('years', years.join(','));
     if (metrics.length) params.append('metrics', metrics.join(','));
     if (datasets.length) params.append('datasets', datasets.join(','));
+    if (domains.length) params.append('domains', domains.join(','));
     if (challenges.length) params.append('challenges', challenges.join(','));
-    if (searchQuery) params.append('search', searchQuery);
+    if (searchTerm) params.append('search', searchTerm);
 
     const url = `/api/papers?${params.toString()}`;
     console.log('Sending request to:', url);

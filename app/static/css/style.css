@@ -301,7 +301,7 @@
 }
 
 .stats-title {
-    border-left: 4px solid black;
+    border-left: 2px solid black;
     padding-left: 0.5rem;
     animation: blink 1s infinite;
 }

@@ -17,6 +17,18 @@
                         </div>
                         <div class="column is-3">
                             <div class="has-text-centered">
+                                <p class="heading">Publication Years</p>
+                                <p class="title">{{ year_range }}</p>
+                            </div>
+                        </div>
+                        <div class="column is-3">
+                            <div class="has-text-centered">
+                                <p class="heading">Unique Authors</p>
+                                <p class="title">{{ unique_authors }}</p>
+                            </div>
+                        </div>
+                        <div class="column is-3">
+                            <div class="has-text-centered">
                                 <p class="heading">Unique Datasets</p>
                                 <p class="title">{{ unique_datasets }}</p>
                             </div>
@@ -33,6 +45,12 @@
                                 <p class="title">{{ total_components }}</p>
                             </div>
                         </div>
+                        <div class="column is-3">
+                            <div class="has-text-centered">
+                                <p class="heading">Application Domains</p>
+                                <p class="title">{{ unique_domains }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,6 +59,14 @@
                 <div class="box">
                     <h2 class="title is-4"><span class="stats-title"></span>Most Popular Datasets</h2>
                     <div id="datasets-plot">{{ datasets_plot | safe }}</div>
+                </div>
+            </div>
+
+            <!-- Distribution of Domains -->
+            <div class="column is-12">
+                <div class="box">
+                    <h2 class="title is-4"><span class="stats-title"></span>Document Domains Summarized</h2>
+                    <div id="domains-plot">{{ domains_plot | safe }}</div>
                 </div>
             </div>
 

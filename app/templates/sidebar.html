@@ -49,6 +49,18 @@
         </div>
     </div>
 
+    <!-- Domains Filter -->
+    <div class="field">
+        <label class="label">Domains</label>
+        <div class="control">
+            <select id="domains-select" multiple placeholder="Select domains...">
+                {% for domain in domains %}
+                <option value="{{ domain }}">{{ domain }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
     <!-- Challenges Filter -->
     <div class="field">
         <label class="label">Challenges</label>

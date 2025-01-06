@@ -44,6 +44,7 @@ async def index(request: Request, db: Session = Depends(get_db)):
     metrics = sorted(list(set(m for p in papers for m in p.metrics if m)))
     datasets = sorted(list(set(d for p in papers for d in p.datasets if d)))
     challenges = sorted(list(set(c.name for p in papers for c in p.challenges)))
+    domains = sorted(list(set(d.strip("[]'") for p in papers for d in (p.domains or []) if d)))
 
     return templates.TemplateResponse(
         "index.html",
@@ -54,6 +55,7 @@ async def index(request: Request, db: Session = Depends(get_db)):
             "metrics": metrics,
             "datasets": datasets,
             "challenges": challenges,
+            "domains": domains,
         },
     )
 
@@ -105,6 +107,7 @@ async def get_papers(
     metrics: str = None,
     datasets: str = None,
     challenges: str = None,
+    domains: str = None,
     components: list[str] = Query(None),
     search: str = None,
 ):
@@ -135,6 +138,12 @@ async def get_papers(
         for dataset in dataset_list:
             filters.append(Paper.datasets.contains(dataset))
         filter_params["datasets"] = datasets
+
+    if domains:
+        domain_list = domains.split(",")
+        for domain in domain_list:
+            filters.append(Paper.domains.contains(domain.strip("[]'")))
+        filter_params["domains"] = domains
 
     if challenges:
         challenge_list = challenges.split(",")
@@ -200,25 +209,21 @@ async def get_papers(
 
 @app.get("/api/filters")
 async def get_filters(db: Session = Depends(get_db)):
-    venues = db.query(Paper.venue).distinct().all()
-    years = db.query(Paper.year).distinct().order_by(Paper.year.desc()).all()
-
-    # Get unique metrics and datasets from JSON arrays
-    metrics_query = db.query(Paper.metrics).distinct().all()
-    datasets_query = db.query(Paper.datasets).distinct().all()
-
-    metrics = set()
-    datasets = set()
-    for m in metrics_query:
-        metrics.update(m[0])
-    for d in datasets_query:
-        datasets.update(d[0])
+    papers = db.query(Paper).all()
+    venues = sorted(list(set(p.venue for p in papers if p.venue)))
+    years = sorted(list(set(p.year for p in papers if p.year)), reverse=True)
+    metrics = sorted(list(set(m for p in papers for m in p.metrics if m)))
+    datasets = sorted(list(set(d for p in papers for d in p.datasets if d)))
+    challenges = sorted(list(set(c.name for p in papers for c in p.challenges)))
+    domains = sorted(list(set(d.strip("[]'") for p in papers for d in (p.domains or []) if d)))
 
     return {
-        "venues": [v[0] for v in venues],
-        "years": [y[0] for y in years],
-        "metrics": list(metrics),
-        "datasets": list(datasets),
+        "venues": venues,
+        "years": years,
+        "metrics": metrics,
+        "datasets": datasets,
+        "challenges": challenges,
+        "domains": domains,
     }
 
 
@@ -230,31 +235,69 @@ async def get_challenges(db: Session = Depends(get_db)):
 
 @app.get("/about")
 async def about_page(request: Request, db: Session = Depends(get_db)):
-    # Get total papers
-    total_papers = db.query(Paper).count()
+    # Get papers and calculate basic stats
+    papers = db.query(Paper).all()
+    total_papers = len(papers)
+    
+    # Get unique datasets
+    all_datasets = set()
+    for paper in papers:
+        if paper.datasets:
+            all_datasets.update(d.strip() for d in paper.datasets if d.strip())
+    unique_datasets = len(all_datasets)
+    
+    # Get unique domains
+    all_domains = set()
+    for paper in papers:
+        if paper.domains:
+            all_domains.update(d.strip("[]'") for d in paper.domains if d.strip("[]'"))
+    unique_domains = len(all_domains)
+    
+    # Get publication years range
+    years = [p.year for p in papers if p.year]
+    year_range = f"{min(years)} - {max(years)}" if years else "N/A"
+    
+    # Get unique authors
+    all_authors = set()
+    for paper in papers:
+        if paper.authors:
+            # Authors is already a list
+            all_authors.update(a.strip() for a in paper.authors if a.strip())
+    unique_authors = len(all_authors)
 
-    # Get dataset statistics
-    all_datasets = []
-    for paper in db.query(Paper).all():
-        all_datasets.extend(paper.datasets)
-    dataset_counts = Counter(all_datasets)
+    # Get dataset statistics for plot
+    dataset_counts = Counter()
+    for paper in papers:
+        if paper.datasets:
+            dataset_counts.update(d.strip() for d in paper.datasets if d.strip())
     top_10_datasets = dict(
         sorted(dataset_counts.items(), key=lambda x: x[1], reverse=True)[:10]
     )
 
-    # Create datasets bar plot
-    datasets_fig = go.Figure(
+    # Get domains distribution
+    all_domains = []
+    for paper in papers:
+        if paper.domains:
+            all_domains.extend(d.strip("[]'") for d in paper.domains if d.strip("[]'"))
+    domain_counts = Counter(all_domains)
+    top_10_domains = dict(
+        sorted(domain_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    )
+    
+    # Create domains bar plot
+    domains_fig = go.Figure(
         data=[
             go.Bar(
-                x=list(top_10_datasets.values()),
-                y=list(top_10_datasets.keys()),
+                x=list(reversed(list(top_10_domains.values()))),
+                y=list(reversed(list(top_10_domains.keys()))),
                 orientation="h",
             )
         ]
     )
-    datasets_fig.update_layout(
+    domains_fig.update_layout(
+        title="Top 10 Application Domains",
         xaxis_title="Number of Papers",
-        yaxis_title="Dataset",
+        yaxis_title="Domain",
         height=400,
         margin=dict(l=20, r=20, t=40, b=20),
     )
@@ -298,16 +341,37 @@ async def about_page(request: Request, db: Session = Depends(get_db)):
         xaxis_tickangle=-45,
     )
 
+    # Create datasets bar plot
+    datasets_fig = go.Figure(
+        data=[
+            go.Bar(
+                x=list(reversed(list(top_10_datasets.values()))),
+                y=list(reversed(list(top_10_datasets.keys()))),
+                orientation="h",
+            )
+        ]
+    )
+    datasets_fig.update_layout(
+        xaxis_title="Number of Papers",
+        yaxis_title="Dataset",
+        height=400,
+        margin=dict(l=20, r=20, t=40, b=20),
+    )
+
     return templates.TemplateResponse(
         "about.html",
         {
             "request": request,
             "total_papers": total_papers,
-            "unique_datasets": len(dataset_counts),
+            "unique_datasets": unique_datasets,
+            "unique_domains": unique_domains,
+            "year_range": year_range,
+            "unique_authors": unique_authors,
             "total_challenges": len(challenges_dict),
             "total_components": len(components_dict),
             "datasets_plot": datasets_fig.to_html(full_html=False),
             "challenges_plot": challenges_fig.to_html(full_html=False),
             "components_plot": components_fig.to_html(full_html=False),
+            "domains_plot": domains_fig.to_html(full_html=False),
         },
     )
