@@ -1,4 +1,4 @@
-# TL;DR Progress: Multi-faceted Literature Exploration in Text Summarization. [[Demo]([https://www.tldr-progress.de/](http://www.tldr-progress.de/))] [[Paper](https://arxiv.org/abs/2402.06913)]
+# TL;DR Progress: Multi-faceted Literature Exploration in Text Summarization. [[Demo](http://www.tldr-progress.de/)] [[Paper](https://arxiv.org/abs/2402.06913)]
 
 TL;DR Progress is an interactive web application for exploring the landscape of text summarization research. It provides a curated database of papers annotated with different aspects of text summarization such as datasets, evaluation metrics, pipeline components and research challenges. 
 
